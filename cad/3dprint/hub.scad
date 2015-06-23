@@ -35,8 +35,8 @@ module base() {
 }
 
 module holes(radius) {
-  translate([-radius/2,0,0]) cylinder(r=screw/2,h=hstep1);
-  translate([radius/2,0,0]) cylinder(r=screw/2,h=hstep1);
+  translate([-radius/2+screw/2,0,0]) cylinder(r=screw/2,h=hstep1);
+  translate([radius/2-screw/2,0,0]) cylinder(r=screw/2,h=hstep1);
 }
 
 module shaft() {
