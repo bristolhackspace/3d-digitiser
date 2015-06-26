@@ -1,13 +1,13 @@
 /* SETTINGS*/
 $fn=100;
-hstep1 = 3; // base height
-hstep2 = 3; // protrusion height
+hstep1 = 7; // base height
+hstep2 = 6; // protrusion height
 id = 6.34; // inner dia (encoder shaft dia)
 od = 18; // outer dia (laser cutting cutout)
 radius = 25; // base radius
 hradius = 38; // radius about which mouting holes sit
 screw = 3; // mouting screw size
-intf = 0.2; // interference fit reduction
+intf = 0; // interference fit reduction
 // keyway
 keyway = true; // add keyway
 keywidth = 2.5; // keyway width
