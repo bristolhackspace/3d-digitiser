@@ -20,18 +20,16 @@ SoftwareSerial mySerial(8,9); // RX, TX
 #define BUTTON 5
 
 
-void setup()
+void setup_usdigi_encoder()
 {
   pinMode(LED, OUTPUT);
   pinMode(DATA_DE, OUTPUT);
   pinMode(BUSY,INPUT);
-  Serial.begin(9600);
-Serial.println("started");
   // set the data rate for the SoftwareSerial port
   mySerial.begin(9600);
 }
 
-void loop() // run over and over
+void xloop() // run over and over
 {
 	/*
 	// set an address
