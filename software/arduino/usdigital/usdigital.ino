@@ -19,17 +19,21 @@ SoftwareSerial mySerial(8,9); // RX, TX
 #define GPIO3 3
 #define BUTTON 5
 
+unsigned int get_pos(byte address);
 
-void setup_usdigi_encoder()
+
+void setup()
 {
   pinMode(LED, OUTPUT);
   pinMode(DATA_DE, OUTPUT);
   pinMode(BUSY,INPUT);
   // set the data rate for the SoftwareSerial port
   mySerial.begin(9600);
+  Serial.begin(9600);
+  Serial.println("started");
 }
 
-void xloop() // run over and over
+void loop() // run over and over
 {
 	/*
 	// set an address
@@ -49,7 +53,6 @@ void xloop() // run over and over
 	digitalWrite(LED,LOW);
 	delay(100);
 }
-
 
 //single byte command
 unsigned int get_pos(byte address)
