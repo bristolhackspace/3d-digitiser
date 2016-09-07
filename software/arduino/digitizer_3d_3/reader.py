@@ -10,13 +10,14 @@ print_interval = 0.1
 serial_port=serial.Serial()
 serial_port.port='/dev/ttyACM0'
 serial_port.timeout=0.10
-serial_port.baudrate=9600
+serial_port.baudrate=115200
 serial_port.open()
 
 pos = { 'x': 0, 'y': 0, 'z': 0 }
 rot = { 'a': 0, 'b': 0, 'c': 0 }
 
 def communicate():
+    serial_port.write('a')
     packet_size = struct.calcsize(FMT)
     response = serial_port.read(packet_size)
     if len(response) == packet_size:
@@ -33,6 +34,9 @@ def communicate():
             rot['b'] = math.degrees(amount)
         elif axis == 'c':
             rot['c'] = math.degrees(amount)
+    else:
+        print("no response")
+
 
 time_now = time.time()
 try:

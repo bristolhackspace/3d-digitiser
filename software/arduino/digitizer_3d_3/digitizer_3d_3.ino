@@ -52,7 +52,7 @@ void setup()
   encoder_init_step[1]=get_pos(1);
   encoder_init_step[2]=get_pos(2);
   
-  Serial.begin(9600);
+  Serial.begin(115200);
 }
 
 /* 
@@ -69,26 +69,35 @@ double get_angle(int encoder_num)
 
 void loop()
 {
-    double A=get_angle(0); //end
-    double B=get_angle(1); //mid
-    double C=get_angle(2); //base
+    if(Serial.available())
+    {
+        if(Serial.read() == 'a')
+        {
 
-    // kinematics: http://es.mathworks.com/help/fuzzy/examples/modeling-inverse-kinematics-in-a-robotic-arm.html
-    double r=cos(B)*ARM+cos(A+B)*ARM;
-    double h=sin(B)*ARM+sin(A+B)*ARM+H0;
+            double A=get_angle(0); //end
+            double B=get_angle(1); //mid
+            double C=get_angle(2); //base
 
-    double y = BW/2 - r*cos(C);
-    double x = BW/2 - r*sin(C);
-    double z = h;
+            // kinematics: http://es.mathworks.com/help/fuzzy/examples/modeling-inverse-kinematics-in-a-robotic-arm.html
+            double r=cos(B)*ARM+cos(A+B)*ARM;
+            double h=sin(B)*ARM+sin(A+B)*ARM+H0;
 
-    /*
-    sendFloat(A,'a');
-    sendFloat(B,'b');
-    sendFloat(C,'c');
-    */
-    sendFloat(x,'x');
-    sendFloat(y,'y');
-    sendFloat(z,'z');
+            double y = BW/2 - r*cos(C);
+            double x = BW/2 - r*sin(C);
+            double z = h;
 
-    delay(50);
+            /*
+            sendFloat(A,'a');
+            sendFloat(B,'b');
+            sendFloat(C,'c');
+            */
+            sendFloat(x,'x');
+            sendFloat(y,'y');
+            sendFloat(z,'z');
+        }
+        else
+        {
+            Serial.flush();
+        }
+    }
 }
