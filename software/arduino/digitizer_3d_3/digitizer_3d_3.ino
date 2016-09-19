@@ -22,14 +22,15 @@ double C; //base pivot = encoder 2
 #define STEPS 2048.0
 
 //length of both arm sections
-#define ARM 176.8 // from cad
+#define ARM_E 173.5 // from cad
+#define ARM_M 176.8 // from cad
 
 //height of first pivot from top of base to centre of encoder 1 pivot
-#define H0 87.0 // measured
+#define H0 87.4 // measured
 // distance from centre of base to first pivot centre - from cad
 #define R0 180.0 //from cad
 //base width
-#define BW 250
+#define BW 250.0
 
 double get_angle(int encoder_num);
 void sendFloat(float f,unsigned t);
@@ -39,6 +40,7 @@ float cosine_law(float a, float b, float c);
 void setup()
 {
   setup_a2();
+  Serial.begin(115200);
   //init angles
   init_angles();
 
@@ -52,9 +54,7 @@ void setup()
   pinMode(LED, OUTPUT);
   digitalWrite(LED, HIGH);
   
-  Serial.begin(115200);
 }
-
 
 void loop()
 {
@@ -63,8 +63,8 @@ void loop()
     double C=get_angle(2); //base
 
     // kinematics: http://es.mathworks.com/help/fuzzy/examples/modeling-inverse-kinematics-in-a-robotic-arm.html
-    double r=cos(B)*ARM+cos(A+B)*ARM;
-    double h=sin(B)*ARM+sin(A+B)*ARM+H0;
+    double r=cos(B)*ARM_M+cos(A+B)*ARM_E;
+    double h=sin(B)*ARM_M+sin(A+B)*ARM_E+H0;
 
     double y = BW/2 - r*cos(C);
     double x = BW/2 - r*sin(C);
@@ -76,11 +76,9 @@ void loop()
         {
             digitalWrite(LED, HIGH);
 
-            /*
             sendFloat(A,'a');
             sendFloat(B,'b');
             sendFloat(C,'c');
-            */
 
             sendFloat(x,'x');
             sendFloat(y,'y');
@@ -133,16 +131,21 @@ void init_angles()
     float hyp = sqrt(H0*H0 + R0*R0);
 
     // end angle
-    float C = cosine_law(ARM, ARM, hyp);
-    encoder_init_angle[1]=M_PI + C;
+    float C = cosine_law(ARM_E, ARM_M, hyp);
+    encoder_init_angle[0]=M_PI + C;
 
     // mid angle
-    C = cosine_law(ARM, hyp, ARM);
+    C = cosine_law(ARM_M, hyp, ARM_E);
     float gamma = atan(H0/R0);
-    encoder_init_angle[0] = C - gamma;
+    encoder_init_angle[1] = C - gamma;
 
     // base angle
     encoder_init_angle[2] = M_PI / 4;
+/*
+    Serial.println(encoder_init_angle[0]);
+    Serial.println(encoder_init_angle[1]);
+    Serial.println(encoder_init_angle[2]);
+*/
 }
 
 float cosine_law(float a, float b, float c)
